@@ -19,7 +19,15 @@
     <input type="date" id="dueDate" name="dueDate" />
     <small id="dueDate-error" class="error-message"></small>
   </div>
-  <button type="submit">Create Task</button>
+  <div class="form-group">
+    <label for="category">Category</label>
+    <select id="category" name="categoryId" class="form-control">
+      {{#each categories}}
+        <option value="{{this._id}}">{{this.name}}</option>
+      {{/each}}
+    </select>
+  </div>
+  <button type="submit" class="btn btn-primary">Create Task</button>
 </form>
 
 <script>

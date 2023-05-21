@@ -1,8 +1,8 @@
-import express from "express";
-const router = express.Router();
 import bcrypt from "bcryptjs";
+import express from "express";
 import passport from "../config/passport.js";
-import User from "../models/User.js";
+import User from "../models/user.js";
+const router = express.Router();
 
 // GET route for user registration
 router.get("/register", (req, res) => {

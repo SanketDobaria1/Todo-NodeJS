@@ -1,0 +1,17 @@
+<h1>Task Details</h1>
+  <div class="task-details">
+    <h2>{{task.title}}</h2>
+    <p>Description: {{task.description}}</p>
+    <p>Due Date: {{task.dueDate}}</p>
+    <p>Category: {{task.category.name}}</p>
+  </div>
+  <div class="comments-section">
+    <h2>Comments</h2>
+    {{#each task.comments}}
+      <div class="comment">
+        <p>{{this.content}}</p>
+        <p>By: {{this.user.username}}</p>
+        <p>Posted at: {{this.createdAt}}</p>
+      </div>
+    {{/each}}
+  </div>

@@ -22,14 +22,30 @@ router.get("/create", (req, res) => {
 });
 
 // POST route for creating a new task
-router.post("/", async (req, res) => {
-  try {
-    const task = await Task.create(req.body);
-    res.redirect("/tasks");
-  } catch (err) {
-    console.error(err);
-    res.render("error", { message: "Error creating task" });
+router.post("/", authenticationMiddleware, (req, res) => {
+  const { title, description, dueDate, categoryId } = req.body;
+
+  if (!title || !categoryId) {
+    return res.status(400).json({ error: "Title and category are required" });
   }
+
+  const task = new Task({
+    title,
+    description,
+    dueDate,
+    category: categoryId, // Assign the selected category ID to the task
+  });
+
+  // Save the task
+  task.save((err) => {
+    if (err) {
+      console.log(err);
+      return res
+        .status(500)
+        .json({ error: "An error occurred while creating the task" });
+    }
+    return res.status(201).json({ message: "Task created successfully" });
+  });
 });
 
 // GET route for editing a task
@@ -50,21 +66,40 @@ router.get("/:id/edit", async (req, res) => {
 });
 
 // PUT route for updating a task
-router.put("/:id", async (req, res) => {
-  try {
-    const task = await Task.findById(req.params.id);
+router.put("/:id", authenticationMiddleware, (req, res) => {
+  const { title, description, dueDate, categoryId } = req.body;
 
-    // Check if the current user is the owner of the task
-    if (task.userId.toString() !== req.user._id.toString()) {
-      return res.status(403).render("error", { message: "Access Denied" });
+  if (!title || !categoryId) {
+    return res.status(400).json({ error: "Title and category are required" });
+  }
+
+  Task.findById(req.params.id, (err, task) => {
+    if (err) {
+      console.log(err);
+      return res
+        .status(500)
+        .json({ error: "An error occurred while finding the task" });
+    }
+    if (!task) {
+      return res.status(404).json({ error: "Task not found" });
     }
 
-    await Task.findByIdAndUpdate(req.params.id, req.body);
-    res.redirect("/tasks");
-  } catch (err) {
-    console.error(err);
-    res.render("error", { message: "Error updating task" });
-  }
+    task.title = title;
+    task.description = description;
+    task.dueDate = dueDate;
+    task.category = categoryId; // Update the task's category ID
+
+    // Save the updated task
+    task.save((err) => {
+      if (err) {
+        console.log(err);
+        return res
+          .status(500)
+          .json({ error: "An error occurred while updating the task" });
+      }
+      return res.status(200).json({ message: "Task updated successfully" });
+    });
+  });
 });
 
 // DELETE route for deleting a task

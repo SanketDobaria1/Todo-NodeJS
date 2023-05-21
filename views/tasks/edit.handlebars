@@ -17,5 +17,13 @@
     <label for="dueDate">Due Date:</label>
     <input type="date" id="dueDate" name="dueDate" value="{{task.dueDate}}">
   </div>
-  <button type="submit">Update Task</button>
+  <div class="form-group">
+    <label for="category">Category</label>
+    <select id="category" name="categoryId" class="form-control">
+      {{#each categories}}
+        <option value="{{this._id}}" {{#ifCond this._id task.category}}selected{{/ifCond}}>{{this.name}}</option>
+      {{/each}}
+    </select>
+  </div>
+  <button type="submit" class="btn btn-primary">Update Task</button>
 </form>
