@@ -33,9 +33,15 @@ router.post("/", async (req, res) => {
 });
 
 // GET route for editing a task
-router.get("/:id/edit", async (req, res) => {
+router.get("/:id/edit", ensureAuthenticated, async (req, res) => {
   try {
     const task = await Task.findById(req.params.id);
+
+    // Check if the current user is the owner of the task
+    if (task.userId.toString() !== req.user._id.toString()) {
+      return res.status(403).render("error", { message: "Access Denied" });
+    }
+
     res.render("tasks/edit", { task });
   } catch (err) {
     console.error(err);
@@ -44,8 +50,15 @@ router.get("/:id/edit", async (req, res) => {
 });
 
 // PUT route for updating a task
-router.put("/:id", async (req, res) => {
+router.put("/:id", ensureAuthenticated, async (req, res) => {
   try {
+    const task = await Task.findById(req.params.id);
+
+    // Check if the current user is the owner of the task
+    if (task.userId.toString() !== req.user._id.toString()) {
+      return res.status(403).render("error", { message: "Access Denied" });
+    }
+
     await Task.findByIdAndUpdate(req.params.id, req.body);
     res.redirect("/tasks");
   } catch (err) {
@@ -55,8 +68,15 @@ router.put("/:id", async (req, res) => {
 });
 
 // DELETE route for deleting a task
-router.delete("/:id", async (req, res) => {
+router.delete("/:id", ensureAuthenticated, async (req, res) => {
   try {
+    const task = await Task.findById(req.params.id);
+
+    // Check if the current user is the owner of the task
+    if (task.userId.toString() !== req.user._id.toString()) {
+      return res.status(403).render("error", { message: "Access Denied" });
+    }
+
     await Task.findByIdAndDelete(req.params.id);
     res.redirect("/tasks");
   } catch (err) {
@@ -64,5 +84,14 @@ router.delete("/:id", async (req, res) => {
     res.render("error", { message: "Error deleting task" });
   }
 });
+
+// Middleware to check if the user is authenticated
+function ensureAuthenticated(req, res, next) {
+  if (req.isAuthenticated()) {
+    return next();
+  }
+
+  res.redirect("/users/login");
+}
 
 export default router;
