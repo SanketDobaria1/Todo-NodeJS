@@ -1,0 +1,14 @@
+<h2>My Profile</h2>
+
+<!-- Display user information -->
+
+<h3>Shared Tasks</h3>
+{{#if sharedTasks.length}}
+  <ul>
+    {{#each sharedTasks}}
+      <li>{{this.title}}</li>
+    {{/each}}
+  </ul>
+{{else}}
+  <p>No shared tasks.</p>
+{{/if}}
