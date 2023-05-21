@@ -1,5 +1,21 @@
 <h1>Task List</h1>
 
+<form method="GET" action="/tasks">
+  <label for="sort">Sort by:</label>
+  <select name="sort" id="sort">
+    <option value="createdAt" {{#if_eq sort "createdAt"}}selected{{/if_eq}}>Creation Date</option>
+    <option value="dueDate" {{#if_eq sort "dueDate"}}selected{{/if_eq}}>Due Date</option>
+  </select>
+  
+  <label for="sortOrder">Sort order:</label>
+  <select name="sortOrder" id="sortOrder">
+    <option value="asc" {{#if_eq sortOrder 1}}selected{{/if_eq}}>Ascending</option>
+    <option value="desc" {{#if_eq sortOrder -1}}selected{{/if_eq}}>Descending</option>
+  </select>
+  
+  <button type="submit">Sort</button>
+</form>
+
 {{#each tasks}}
   <div>
     <h3>{{title}}</h3>

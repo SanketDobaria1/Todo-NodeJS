@@ -5,8 +5,11 @@ const router = express.Router();
 // GET route for listing tasks
 router.get("/", async (req, res) => {
   try {
-    const tasks = await Task.find();
-    res.render("tasks/list", { tasks });
+    let sort = req.query.sort || "createdAt"; // Default sort by creation date
+    let sortOrder = req.query.sortOrder === "desc" ? -1 : 1; // Sort order (ascending or descending)
+
+    const tasks = await Task.find().sort({ [sort]: sortOrder });
+    res.render("tasks/list", { tasks, sort, sortOrder });
   } catch (err) {
     console.error(err);
     res.render("error", { message: "Error retrieving tasks" });
