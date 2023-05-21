@@ -1,9 +1,10 @@
 <h1>Create Task</h1>
 
-<form method="POST" action="/tasks">
+<form method="POST" action="/tasks" onsubmit="return validateForm()">
   <div>
     <label for="title">Title:</label>
     <input type="text" id="title" name="title" required />
+    <small id="title-error" class="error-message"></small>
   </div>
   <div>
     <label for="description">Description:</label>
@@ -16,6 +17,32 @@
   <div>
     <label for="dueDate">Due Date:</label>
     <input type="date" id="dueDate" name="dueDate" />
+    <small id="dueDate-error" class="error-message"></small>
   </div>
   <button type="submit">Create Task</button>
 </form>
+
+<script>
+  function validateForm() {
+    // Clear previous error messages
+    document.querySelectorAll('.error-message').forEach(element => {
+      element.textContent = '';
+    });
+
+    // Validate title
+    const titleInput = document.getElementById('title');
+    if (titleInput.value.trim() === '') {
+      document.getElementById('title-error').textContent = 'Title is required';
+      return false;
+    }
+
+    // Validate due date
+    const dueDateInput = document.getElementById('dueDate');
+    if (dueDateInput.value.trim() === '') {
+      document.getElementById('dueDate-error').textContent = 'Due Date is required';
+      return false;
+    }
+
+    return true;
+  }
+</script>

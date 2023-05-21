@@ -10,6 +10,7 @@ const app = express();
 // Configure the app
 app.engine("handlebars", exphbs({ defaultLayout: "main" }));
 app.set("view engine", "handlebars");
+app.use(express.urlencoded({ extended: false }));
 
 // Connect to the MongoDB database
 mongoose
@@ -37,6 +38,21 @@ app.use(passport.session());
 
 // Flash messages
 app.use(flash());
+
+// Custom middleware for task creation validation
+app.use((req, res, next) => {
+  if (req.originalUrl === "/tasks" && req.method === "POST") {
+    const { title, dueDate } = req.body;
+
+    if (!title || !dueDate) {
+      return res
+        .status(400)
+        .render("error", { message: "Title and Due Date are required" });
+    }
+  }
+
+  next();
+});
 
 // Define routes
 app.get("/", (req, res) => {
