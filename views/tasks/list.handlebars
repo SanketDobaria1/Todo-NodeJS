@@ -1,0 +1,12 @@
+<h1>Task List</h1>
+
+{{#each tasks}}
+  <div>
+    <h3>{{title}}</h3>
+    <p>{{description}}</p>
+    <p>Completed: {{completed}}</p>
+    <p>Due Date: {{dueDate}}</p>
+  </div>
+{{else}}
+  <p>No tasks found</p>
+{{/each}}

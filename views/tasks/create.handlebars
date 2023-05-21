@@ -1,0 +1,21 @@
+<h1>Create Task</h1>
+
+<form method="POST" action="/tasks">
+  <div>
+    <label for="title">Title:</label>
+    <input type="text" id="title" name="title" required />
+  </div>
+  <div>
+    <label for="description">Description:</label>
+    <textarea id="description" name="description"></textarea>
+  </div>
+  <div>
+    <label for="completed">Completed:</label>
+    <input type="checkbox" id="completed" name="completed" />
+  </div>
+  <div>
+    <label for="dueDate">Due Date:</label>
+    <input type="date" id="dueDate" name="dueDate" />
+  </div>
+  <button type="submit">Create Task</button>
+</form>
