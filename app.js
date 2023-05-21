@@ -4,6 +4,10 @@ import mongoose from "mongoose";
 import session from "express-session";
 import flash from "connect-flash";
 import passport from "./config/passport.js";
+import {
+  authenticationMiddleware,
+  authorizationMiddleware,
+} from "./middleware/middleware.js";
 
 const app = express();
 
@@ -38,6 +42,8 @@ app.use(passport.session());
 
 // Flash messages
 app.use(flash());
+
+app.use(authenticationMiddleware);
 
 // Custom middleware for task creation validation
 app.use((req, res, next) => {

@@ -33,7 +33,7 @@ router.post("/", async (req, res) => {
 });
 
 // GET route for editing a task
-router.get("/:id/edit", ensureAuthenticated, async (req, res) => {
+router.get("/:id/edit", async (req, res) => {
   try {
     const task = await Task.findById(req.params.id);
 
@@ -50,7 +50,7 @@ router.get("/:id/edit", ensureAuthenticated, async (req, res) => {
 });
 
 // PUT route for updating a task
-router.put("/:id", ensureAuthenticated, async (req, res) => {
+router.put("/:id", async (req, res) => {
   try {
     const task = await Task.findById(req.params.id);
 
@@ -68,7 +68,7 @@ router.put("/:id", ensureAuthenticated, async (req, res) => {
 });
 
 // DELETE route for deleting a task
-router.delete("/:id", ensureAuthenticated, async (req, res) => {
+router.delete("/:id", async (req, res) => {
   try {
     const task = await Task.findById(req.params.id);
 
@@ -84,14 +84,5 @@ router.delete("/:id", ensureAuthenticated, async (req, res) => {
     res.render("error", { message: "Error deleting task" });
   }
 });
-
-// Middleware to check if the user is authenticated
-function ensureAuthenticated(req, res, next) {
-  if (req.isAuthenticated()) {
-    return next();
-  }
-
-  res.redirect("/users/login");
-}
 
 export default router;
