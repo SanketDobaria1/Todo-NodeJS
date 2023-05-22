@@ -13,7 +13,24 @@ router.get("/", async (req, res) => {
       ],
     };
 
-    let sort = req.query.sort || "createdAt"; // Default sort by creation date
+    const sort = req.query.sort || 'dueDate';
+    let sortField;
+
+    // Determine the field to use for sorting based on the selected criteria
+    switch (sort) {
+      case 'dueDate':
+        sortField = 'dueDate';
+        break;
+      case 'priority':
+        sortField = 'priority';
+        break;
+      case 'completed':
+        sortField = 'completed';
+        break;
+      default:
+        sortField = 'dueDate';
+        break;
+    }
     let sortOrder = req.query.sortOrder === "desc" ? -1 : 1; // Sort order (ascending or descending)
 
     const page = req.query.page || 1;
@@ -23,7 +40,7 @@ router.get("/", async (req, res) => {
     const totalTasks = await Task.countDocuments();
 
     const tasks = await Task.find(query)
-      .sort({ [sort]: sortOrder })
+      .sort({ [sortField]: sortOrder })
       .skip(skip)
       .limit(limit);
 

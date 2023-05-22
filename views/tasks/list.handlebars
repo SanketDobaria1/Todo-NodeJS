@@ -5,11 +5,12 @@
   <button type="submit">Search</button>
 </form>
 
-<form method="GET" action="/tasks">
+<form method="GET" action="/tasks" class="sort-form">
   <label for="sort">Sort by:</label>
-  <select name="sort" id="sort">
-    <option value="createdAt" {{#if_eq sort "createdAt"}}selected{{/if_eq}}>Creation Date</option>
-    <option value="dueDate" {{#if_eq sort "dueDate"}}selected{{/if_eq}}>Due Date</option>
+  <select name="sort" onchange="this.form.submit()">
+    <option value="dueDate" {{#if (eq sort 'dueDate')}}selected{{/if}}>Due Date</option>
+    <option value="priority" {{#if (eq sort 'priority')}}selected{{/if}}>Priority</option>
+    <option value="completed" {{#if (eq sort 'completed')}}selected{{/if}}>Completed</option>
   </select>
   
   <label for="sortOrder">Sort order:</label>
