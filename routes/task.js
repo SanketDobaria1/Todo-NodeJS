@@ -5,6 +5,14 @@ const router = express.Router();
 // GET route for listing tasks
 router.get("/", async (req, res) => {
   try {
+    const search = req.query.search || "";
+    const query = {
+      $or: [
+        { title: { $regex: search, $options: "i" } },
+        { description: { $regex: search, $options: "i" } },
+      ],
+    };
+
     let sort = req.query.sort || "createdAt"; // Default sort by creation date
     let sortOrder = req.query.sortOrder === "desc" ? -1 : 1; // Sort order (ascending or descending)
 
@@ -14,13 +22,14 @@ router.get("/", async (req, res) => {
 
     const totalTasks = await Task.countDocuments();
 
-    const tasks = await Task.find()
+    const tasks = await Task.find(query)
       .sort({ [sort]: sortOrder })
       .skip(skip)
       .limit(limit);
 
     res.render("tasks/list", {
       tasks,
+      search,
       sort,
       sortOrder,
       totalTasks,

@@ -1,5 +1,10 @@
 <h1>Task List</h1>
 
+<form action="/tasks" method="GET" class="search-form">
+  <input type="text" name="search" placeholder="Search tasks" value="{{ search }}">
+  <button type="submit">Search</button>
+</form>
+
 <form method="GET" action="/tasks">
   <label for="sort">Sort by:</label>
   <select name="sort" id="sort">
