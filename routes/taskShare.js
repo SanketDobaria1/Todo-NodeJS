@@ -38,6 +38,29 @@ router.post("/tasks/:taskId/share", async (req, res) => {
   }
 });
 
+// Route to unshare a task with a user
+router.post("/tasks/:taskId/unshare/:userId", async (req, res) => {
+  try {
+    const taskId = req.params.taskId;
+    const userId = req.params.userId;
+    const task = await Task.findById(taskId);
+    if (!task) {
+      return res.status(400).json({ error: "Task not found" });
+    }
+    const index = task.sharedWith.indexOf(userId);
+    if (index > -1) {
+      task.sharedWith.splice(index, 1);
+    }
+    await task.save();
+    res.redirect(`/tasks/${taskId}`);
+  } catch (error) {
+    console.log(error);
+    res
+      .status(500)
+      .json({ error: "An error occurred while unsharing the task" });
+  }
+});
+
 // Route for managing shared tasks
 router.get("/shared-tasks", async (req, res) => {
   try {

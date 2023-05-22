@@ -15,3 +15,16 @@
       </div>
     {{/each}}
   </div>
+
+<h4>Shared with:</h4>
+<ul>
+  {{#each task.sharedWith}}
+    <li>{{ this.name }} <a href="/tasks/{{ task._id }}/unshare/{{ this._id }}">[Unshare]</a></li>
+  {{/each}}
+</ul>
+
+<!-- Form to share the task with another user -->
+<form action="/tasks/{{ task._id }}/share" method="POST">
+  <input type="email" name="email" placeholder="Enter user email">
+  <button type="submit">Share Task</button>
+</form>
