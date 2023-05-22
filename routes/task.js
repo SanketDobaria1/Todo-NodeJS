@@ -8,8 +8,24 @@ router.get("/", async (req, res) => {
     let sort = req.query.sort || "createdAt"; // Default sort by creation date
     let sortOrder = req.query.sortOrder === "desc" ? -1 : 1; // Sort order (ascending or descending)
 
-    const tasks = await Task.find().sort({ [sort]: sortOrder });
-    res.render("tasks/list", { tasks, sort, sortOrder });
+    const page = req.query.page || 1;
+    const limit = 10; // Number of tasks per page
+    const skip = (page - 1) * limit;
+
+    const totalTasks = await Task.countDocuments();
+
+    const tasks = await Task.find()
+      .sort({ [sort]: sortOrder })
+      .skip(skip)
+      .limit(limit);
+
+    res.render("tasks/list", {
+      tasks,
+      sort,
+      sortOrder,
+      totalTasks,
+      currentPage: page,
+    });
   } catch (err) {
     console.error(err);
     res.render("error", { message: "Error retrieving tasks" });

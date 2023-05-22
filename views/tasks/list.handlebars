@@ -16,13 +16,26 @@
   <button type="submit">Sort</button>
 </form>
 
-{{#each tasks}}
-  <div>
-    <h3>{{title}}</h3>
-    <p>{{description}}</p>
-    <p>Completed: {{completed}}</p>
-    <p>Due Date: {{dueDate}}</p>
+{{#if tasks.length}}
+  <ul>
+    {{#each tasks}}
+      <div>
+        <h3>{{title}}</h3>
+        <p>{{description}}</p>
+        <p>Completed: {{completed}}</p>
+        <p>Due Date: {{dueDate}}</p>
+      </div>
+    {{/each}}
+  </ul>
+
+  <div class="pagination">
+    {{#if hasNextPage}}
+      <a href="/tasks?page={{ nextPage }}">Next</a>
+    {{/if}}
+    {{#if hasPrevPage}}
+      <a href="/tasks?page={{ prevPage }}">Previous</a>
+    {{/if}}
   </div>
 {{else}}
-  <p>No tasks found</p>
-{{/each}}
+  <p>No tasks found.</p>
+{{/if}}
